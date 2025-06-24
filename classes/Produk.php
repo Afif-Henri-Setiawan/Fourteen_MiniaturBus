@@ -73,5 +73,13 @@ class Produk
         $stmt = $this->conn->prepare("DELETE FROM produk WHERE id_kategori = :id");
         return $stmt->execute([':id' => $id]);
     }
+
+    public function getAllKategori()
+    {
+        $stmt = $this->conn->prepare("SELECT DISTINCT id_kategori, nama_kategori, gambar FROM produk");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 ?>

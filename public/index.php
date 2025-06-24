@@ -4,6 +4,7 @@ require_once '../classes/Produk.php';
 
 $produk = new Produk();
 $semuaProduk = $produk->getAll();
+$kategoriList = $produk->getAllKategori();
 $first = $semuaProduk[0];
 ?>
 
@@ -142,15 +143,20 @@ $first = $semuaProduk[0];
     <section id="kategori" class="mb-28 mt-20 ">
         <div class="container max-w-full px-10 lg:px-15">
             <h2 class="text-3xl font-semibold text-center">Kategori</h2>
-            <div class="flex flex-wrap justify-center mt-5">
-                <?php foreach ($semuaProduk as $item): ?>
-                    <div
-                        class="cursor-pointer inline-block w-80 h-55 bg-amber-300 mx-4 my-3 relative overflow-hidden group rounded-xl">
-                        <img src="../uploads/<?= htmlspecialchars($item['gambar']) ?>" alt=""
-                            class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
+            <div class="flex flex-wrap justify-center mt-8 gap-4">
+                <?php foreach ($kategoriList as $kategori): ?>
+                    <div onclick="filterKategori(<?= $kategori['id_kategori'] ?>)"
+                        class="cursor-pointer w-80 h-48 bg-amber-300 relative overflow-hidden group rounded-xl shadow-md transition-all duration-300 hover:scale-105"
+                        data-kategori="<?= $kategori['id_kategori'] ?>">
+
+                        <img src="../uploads/<?= htmlspecialchars($kategori['gambar']) ?>"
+                            alt="<?= htmlspecialchars($kategori['nama_kategori']) ?>"
+                            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300" />
+
                         <div class="absolute inset-0 bg-black/30"></div>
-                        <p class="absolute inset-0 flex items-center justify-center text-white text-2xl font-semibold z-10">
-                            <?= htmlspecialchars($item['nama_kategori']) ?>
+
+                        <p class="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold z-10">
+                            <?= htmlspecialchars($kategori['nama_kategori']) ?>
                         </p>
                     </div>
                 <?php endforeach; ?>
@@ -158,6 +164,7 @@ $first = $semuaProduk[0];
 
             <!-- Grid -->
             <div class="grid grid-cols-3 gap-4 mt-10 p-6">
+
                 <!-- Media utama: Video jika ada, gambar jika tidak -->
                 <div
                     class="bg-red-600 h-[1920] col-span-3 lg:row-span-3 lg:col-span-1 flex items-center overflow-hidden justify-center rounded-xl">
@@ -222,10 +229,13 @@ $first = $semuaProduk[0];
                                     <select id="product-category"
                                         class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg">
                                         <option value="" disabled selected>-- Pilih Kategori Produk --</option>
-                                        <option value="Produk A">Elektronik - Laptop Super</option>
-                                        <option value="Produk B">Fashion - Kemeja Casual</option>
-                                        <option value="Produk C">Perabotan - Meja Kayu Jati</option>
+                                        <?php foreach ($semuaProduk as $item): ?>
+                                            <option value="<?= $item['id_kategori'] ?>" data-harga="<?= $item['harga'] ?>">
+                                                <?= htmlspecialchars($item['nama_kategori']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
                                     </select>
+
                                 </div>
                                 <button id="add-product-btn" type="button"
                                     class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-lg flex items-center space-x-2 whitespace-nowrap">
@@ -271,7 +281,8 @@ $first = $semuaProduk[0];
                             </div>
                         </div>
 
-                        <div class="mt-6 pt-4 border-t flex justify-end">
+                        <div class="mt-6 pt-4 border-t flex justify-between">
+                            <p id="total-harga" class="text-lg font-bold text-right mr-4 mt-4">Total: Rp0</p>
                             <button id="btn-selanjutnya"
                                 class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg flex items-center space-x-2">
                                 <span>Selanjutnya</span>
