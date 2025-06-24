@@ -4,8 +4,22 @@ require_once '../classes/Produk.php';
 
 $produk = new Produk();
 $semuaProduk = $produk->getAll();
-$kategoriList = $produk->getAllKategori();
 $first = $semuaProduk[0];
+
+
+// Ambil semua kategori unik
+$kategoriList = $produk->getKategoriList();
+
+// Cek apakah ada kategori yang dipilih
+$idKategori = $_GET['id'] ?? null;
+
+if ($idKategori) {
+    $produkPerKategori = $produk->getByKategori($idKategori);
+    $first = $produkPerKategori[0] ?? null;
+} else {
+    $produkPerKategori = $produk->getAll(); // Default: semua produk
+    $first = $produkPerKategori[0] ?? null;
+}
 ?>
 
 
@@ -145,20 +159,16 @@ $first = $semuaProduk[0];
             <h2 class="text-3xl font-semibold text-center">Kategori</h2>
             <div class="flex flex-wrap justify-center mt-8 gap-4">
                 <?php foreach ($kategoriList as $kategori): ?>
-                    <div onclick="filterKategori(<?= $kategori['id_kategori'] ?>)"
-                        class="cursor-pointer w-80 h-48 bg-amber-300 relative overflow-hidden group rounded-xl shadow-md transition-all duration-300 hover:scale-105"
-                        data-kategori="<?= $kategori['id_kategori'] ?>">
-
+                    <a href="?id=<?= $kategori['id_kategori'] ?>"
+                        class="w-80 h-48 bg-amber-300 relative overflow-hidden group rounded-xl shadow-md transition-all duration-300 hover:scale-105 block">
                         <img src="../uploads/<?= htmlspecialchars($kategori['gambar']) ?>"
                             alt="<?= htmlspecialchars($kategori['nama_kategori']) ?>"
                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300" />
-
                         <div class="absolute inset-0 bg-black/30"></div>
-
                         <p class="absolute inset-0 flex items-center justify-center text-white text-2xl font-bold z-10">
                             <?= htmlspecialchars($kategori['nama_kategori']) ?>
                         </p>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             </div>
 
@@ -204,12 +214,12 @@ $first = $semuaProduk[0];
                     </ul>
                 </div>
 
-                <div class="w-full flex justify-center">
-                    <button id="btn-pesan"
-                        class="bg-green-500 text-white cursor-pointer font-bold text-xl px-20 py-4 rounded-full shadow-lg hover:bg-green-600 duration-100">
-                        Pesan Sekarang
-                    </button>
-                </div>
+            </div>
+            <div class="min-w-full flex justify-center mx-auto">
+                <button id="btn-pesan"
+                    class="bg-green-500 text-white cursor-pointer font-bold text-xl px-20 py-4 rounded-full shadow-lg hover:bg-green-600 duration-100">
+                    Pesan Sekarang
+                </button>
 
                 <!-- form satu -->
                 <div id="form-satu"
@@ -238,7 +248,7 @@ $first = $semuaProduk[0];
 
                                 </div>
                                 <button id="add-product-btn" type="button"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-5 rounded-lg flex items-center space-x-2 whitespace-nowrap">
+                                    class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-5 rounded-lg flex items-center space-x-2 whitespace-nowrap">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -267,7 +277,7 @@ $first = $semuaProduk[0];
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-full file:border-0
                         file:text-sm file:font-semibold
-                        file:bg-blue-50 file:text-blue-700
+                        file:bg-blue-50 file:text-amber-500
                         hover:file:bg-blue-100" />
                                 <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Maksimal 2MB (opsional).</p>
                             </div>
@@ -277,7 +287,7 @@ $first = $semuaProduk[0];
                                     class="block text-xl font-semibold text-gray-700 mb-2">Catatan Tambahan</label>
                                 <textarea id="additional-notes" rows="4"
                                     class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Contoh: Mohon kemejanya ukuran XL, warna navy."></textarea>
+                                    placeholder="Contoh: Buat seperti bu PO Haryanto"></textarea>
                             </div>
                         </div>
 
@@ -292,6 +302,9 @@ $first = $semuaProduk[0];
                                 </svg>
                             </button>
                         </div>
+                        <!-- Tambahkan di bagian akhir form 1 -->
+                        <input type="hidden" name="produk_detail" id="produk-detail-json">
+
                     </div>
                 </div>
 
@@ -305,43 +318,59 @@ $first = $semuaProduk[0];
                             <a class="cursor-pointer" id="btn-kembali">Back</a>
                             <h2 class="text-xl font-semibold mb-4 mx-auto">Formulir Pemesanan</h2>
                         </div>
-                        <form id="form-pemesanan">
+                        <form id="form-pemesanan" method="POST" action="simpan_pesanan.php"
+                            enctype="multipart/form-data">
+                            <!-- Input Nama -->
                             <div class="mb-3">
                                 <label for="name" class="block text-gray-700 text-md font-medium">Nama</label>
-                                <input type="text" id="name" class="w-full border border-gray-300 rounded px-3 py-2"
-                                    placeholder="Masukan nama lengkap" required>
+                                <input type="text" id="name" name="nama"
+                                    class="w-full border border-gray-300 rounded px-3 py-2"
+                                    placeholder="Masukkan nama lengkap" required>
                             </div>
+
+                            <!-- Input Nomor WhatsApp -->
                             <div class="mb-3">
                                 <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor
                                     WhatsApp</label>
-                                <input type="text" id="nomor" class="w-full border border-gray-300 rounded px-3 py-2"
-                                    placeholder="08xxx" required>
+                                <input type="text" id="nomor" name="telepon"
+                                    class="w-full border border-gray-300 rounded px-3 py-2" placeholder="08xxx"
+                                    required>
                             </div>
+
+                            <!-- Input Alamat -->
                             <div class="mb-3">
                                 <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat</label>
-                                <input type="text" id="alamat" class="w-full border border-gray-300 rounded px-3 py-2"
-                                    placeholder="Masukan alamat lengkap" required>
+                                <input type="text" id="alamat" name="alamat"
+                                    class="w-full border border-gray-300 rounded px-3 py-2"
+                                    placeholder="Masukkan alamat lengkap" required>
                             </div>
+
+                            <!-- Upload Bukti Bayar -->
                             <div class="mb-3">
-                                <h3 class="text-gray-700 text-md font-medium">Pembayaran</h3>
-                                <h4>BRI : 07964387695</h4>
+                                <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar</label>
+                                <input type="file" name="bukti_bayar" required class="w-full">
+                                <p class="text-sm text-gray-500">Format JPG/PNG, maksimal 2MB</p>
                             </div>
-                            <div class="mb-3">
-                                <label class="block text-gray-700 text-md font-medium">Upload bukti bayar</label>
-                                <input type="file" id="myFile" name="filename">
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <p>Subtotal : </p>
+
+                            <!-- Hidden untuk total -->
+                            <input type="hidden" name="total" id="total-value" value="">
+
+                            <!-- Hidden untuk data produk -->
+                            <input type="hidden" name="produk_detail" id="produk-detail-json">
+
+                            <input type="hidden" name="total" id="total-input">
+
+                            <!-- Tombol Kirim -->
+                            <div class="flex justify-end">
                                 <button type="submit"
-                                    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Kirim</button>
+                                    class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                                    Kirim
+                                </button>
                             </div>
                         </form>
+
                     </div>
                 </div>
-
-
-
-
     </section>
     <!-- Kategori end -->
 
@@ -351,11 +380,11 @@ $first = $semuaProduk[0];
             <h2 class="text-4xl font-semibold text-center my-10 pb-5">Layanan Kami</h2>
             <div class="my-8">
                 <div class="flex flex-wrap">
-                    <div class="rounded-xl overflow-hidden lg:w-1/2">
-                        <img src="Assets\image\1.jpg" alt="" class="w-full h-full">
+                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2">
+                        <img src="Assets\image\buat.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
-                    <div class="lg:w-1/2 lg:pl-8 lg:pt-5">
+                    <div class="lg:w-1/2 lg:pl-8 lg:pt-8">
                         <h3 class="text-3xl font-semibold mt-10 mb-3 lg:mt-0 ">Buatan Tangan, Penuh Ketelitian</h3>
                         <p class="text-justify text-base lg:mr-4">Setiap miniatur bus kami dibuat dengan tangan oleh
                             pengrajin
@@ -370,8 +399,8 @@ $first = $semuaProduk[0];
 
             <div class="pt-10 lg:pt-20 pb-28 ">
                 <div class="flex flex-wrap">
-                    <div class="rounded-xl overflow-hidden lg:w-1/2 lg:hidden">
-                        <img src="Assets/image/1.jpg" alt="" class="w-full h-full">
+                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2 lg:hidden">
+                        <img src="Assets/image/packing.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
                     <div class="lg:w-1/2 lg:pr-8 lg:pt-5 ">
@@ -383,8 +412,8 @@ $first = $semuaProduk[0];
                         </p>
                     </div>
 
-                    <div class="hidden rounded-xl overflow-hidden lg:w-1/2 lg:block">
-                        <img src="Assets/image/1.jpg" alt="" class="w-full h-full">
+                    <div class="hidden h-80 rounded-xl overflow-hidden lg:w-1/2 lg:block">
+                        <img src="Assets/image/packing.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
                 </div>
@@ -398,26 +427,42 @@ $first = $semuaProduk[0];
     <!-- footer -->
     <footer class="footer sm:footer-horizontal bg-base-200 text-base-content pl-28 p-10">
         <aside>
-            <img src="Assets\image\Fix Logo 14 busworkshop Hitam.png" class="h-16 mt-5" alt="">
+            <img src="Assets/image/Fix Logo 14 busworkshop Hitam.png" class="h-16 mt-5" alt="">
             <p>
                 Fourteen Bus Workshop<br />
-                &copy; <?php echo date('Y'); ?> All rights reserved.
+                &copy; 2024 All rights reserved.
             </p>
         </aside>
+
+        <!-- Link navigasi -->
         <nav class="mt-5">
             <h6 class="footer-title">About us</h6>
             <a href="#home" class="link link-hover">Beranda</a>
             <a href="#kategori" class="link link-hover">Kategori</a>
             <a href="#servis" class="link link-hover">Layanan</a>
         </nav>
+
+        <!-- Media sosial -->
         <nav class="mt-5">
             <h6 class="footer-title">Sosial Media</h6>
             <a href="#" class="link link-hover">Instagram</a>
             <a href="#" class="link link-hover">Facebook</a>
             <a href="#" class="link link-hover">WhatsApp</a>
         </nav>
+
+        <!-- Alamat dan Google Maps -->
+        <div class="mt-5">
+            <h6 class="footer-title">Alamat Kami</h6>
+            <p>Fourteen Bus Workshop<br>Kutasari, Purbalingga, Jawa Tengah</p>
+            <div class="mt-3 rounded-xl overflow-hidden">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.298317877058!2d109.2368359!3d-7.198261899999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e655d6339d11e71%3A0xb070f61a93e7b9f!2sFourteen%20Bus%20Workshop!5e0!3m2!1sid!2sid!4v1719248999999!5m2!1sid!2sid"
+                    width="300" height="100" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
     </footer>
-    <!-- footer end-->
 
 
     <!-- js -->

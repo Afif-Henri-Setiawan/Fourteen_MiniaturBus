@@ -9,45 +9,25 @@ class Pesanan
     }
 
     // Menyimpan data pesanan baru
-    public function create($nama, $telepon, $alamat, $bukti_bayar, $total)
+    public function create($nama, $telepon, $alamat, $bukti_bayar, $gambar_request, $deskripsi, $total)
     {
         $stmt = $this->conn->prepare("INSERT INTO pesanan 
-        (nama_pembeli, no_telp, alamat, bukti_bayar, total, tanggal_pesan)
-        VALUES (:nama, :telepon, :alamat, :bukti_bayar, :total, NOW())");
+        (nama_pembeli, no_telp, alamat, bukti_bayar, gambar_request, deskripsi_tambahan, total, tanggal_pesan)
+        VALUES (:nama, :telepon, :alamat, :bukti_bayar, :gambar_request, :deskripsi_tambahan, :total, NOW())");
 
         $stmt->execute([
             ':nama' => $nama,
             ':telepon' => $telepon,
             ':alamat' => $alamat,
             ':bukti_bayar' => $bukti_bayar,
+            ':gambar_request' => $gambar_request,
+            ':deskripsi_tambahan' => $deskripsi,
             ':total' => $total
         ]);
 
-        return $this->conn->lastInsertId(); // untuk relasi ke pesanan_detail
+        return $this->conn->lastInsertId();
     }
 
-
-    // Ambil semua pesanan
-    public function getAll()
-    {
-        $stmt = $this->conn->query("SELECT * FROM pesanan ORDER BY tanggal_pesan DESC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Ambil satu pesanan berdasarkan ID
-    public function getById($id)
-    {
-        $stmt = $this->conn->prepare("SELECT * FROM pesanan WHERE id_pesanan = :id");
-        $stmt->execute([':id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // Hapus pesanan
-    public function delete($id)
-    {
-        $stmt = $this->conn->prepare("DELETE FROM pesanan WHERE id_pesanan = :id");
-        return $stmt->execute([':id' => $id]);
-    }
 }
 
 ?>

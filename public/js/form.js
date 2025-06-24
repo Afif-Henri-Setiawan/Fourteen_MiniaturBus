@@ -198,4 +198,34 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  let produkTerpilih = [];
+
+  document
+    .getElementById("add-product-btn")
+    .addEventListener("click", function () {
+      const select = document.getElementById("product-category");
+      const jumlah = 1; // atau ambil dari input jumlah jika ada
+      const harga = parseInt(select.selectedOptions[0].dataset.harga || 0);
+      const id = select.value;
+      const nama = select.options[select.selectedIndex].text;
+      const subtotal = jumlah * harga;
+
+      if (id) {
+        produkTerpilih.push({
+          id_kategori: id,
+          nama_kategori: nama,
+          jumlah: jumlah,
+          subtotal: subtotal,
+        });
+
+        // simpan ke input hidden
+        document.getElementById("produk-detail-json").value =
+          JSON.stringify(produkTerpilih);
+      }
+    });
+
+  const totalHargaText1 = document.getElementById("total-harga").textContent;
+  const totalNumber = parseInt(totalHargaText1.replace(/[^\d]/g, ""), 10);
+  document.getElementById("total-input").value = totalNumber;
 });

@@ -74,12 +74,21 @@ class Produk
         return $stmt->execute([':id' => $id]);
     }
 
-    public function getAllKategori()
+    // Ambil semua kategori unik
+    public function getKategoriList()
     {
-        $stmt = $this->conn->prepare("SELECT DISTINCT id_kategori, nama_kategori, gambar FROM produk");
-        $stmt->execute();
+        $stmt = $this->conn->query("SELECT DISTINCT id_kategori, nama_kategori, gambar FROM produk");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Ambil produk berdasarkan id_kategori
+    public function getByKategori($id_kategori)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM produk WHERE id_kategori = :id_kategori");
+        $stmt->execute([':id_kategori' => $id_kategori]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }
 ?>
