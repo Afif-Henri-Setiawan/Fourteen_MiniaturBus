@@ -1,0 +1,19 @@
+{
+  "name": "fourteen_miniaturbus",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.8",
+    "feather-icons": "^4.29.2",
+    "tailwindcss": "^4.1.10"
+  },
+  "devDependencies": {
+    "daisyui": "^5.0.43"
+  }
+}
