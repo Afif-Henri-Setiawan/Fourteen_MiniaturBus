@@ -24,9 +24,37 @@ class Pesanan
             ':deskripsi_tambahan' => $deskripsi,
             ':total' => $total
         ]);
-
         return $this->conn->lastInsertId();
     }
+
+    public function updateStatus($id_pesanan, $status)
+    {
+        $stmt = $this->conn->prepare("UPDATE pesanan SET status = :status WHERE id_pesanan = :id");
+        return $stmt->execute([
+            ':status' => $status,
+            ':id' => $id_pesanan
+        ]);
+    }
+
+    public function getAll()
+    {
+        $stmt = $this->conn->query("SELECT * FROM pesanan ORDER BY tanggal_pesan DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getById($id)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM pesanan WHERE id_pesanan = :id");
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function count()
+    {
+        $stmt = $this->conn->query("SELECT COUNT(*) FROM pesanan");
+        return $stmt->fetchColumn();
+    }
+
 
 }
 

@@ -25,14 +25,16 @@ class PesananDetail
     // Ambil semua produk dalam satu pesanan
     public function getByPesanan($id_pesanan)
     {
-        $sql = "SELECT pd.*, p.nama_produk, p.harga
-                FROM pesanan_detail pd
-                JOIN produk p ON pd.id_kategori = p.id_kategori
-                WHERE pd.id_pesanan = :id_pesanan";
+        $sql = "SELECT pd.*, p.nama_kategori
+            FROM pesanan_detail pd
+            JOIN produk p ON pd.id_kategori = p.id_kategori
+            WHERE pd.id_pesanan = :id_pesanan";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([':id_pesanan' => $id_pesanan]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+
 
     // Hapus semua produk berdasarkan id_pesanan
     public function deleteByPesanan($id_pesanan)

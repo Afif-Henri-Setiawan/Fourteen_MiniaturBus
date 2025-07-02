@@ -1,97 +1,108 @@
+<?php
+require_once '../config/Database.php';
+require_once '../classes/Pesanan.php';
+require_once '../classes/Pesanan_detail.php';
+
+$pdo = Database::getConnection();
+
+// Ambil ID dari URL
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    die("ID tidak ditemukan.");
+}
+
+// Ambil data pesanan dari database
+$pesananObj = new Pesanan($pdo);
+$pesanan = $pesananObj->getById($id); // Pastikan class Pesanan punya method getById
+if (!$pesanan) {
+    die("Pesanan tidak ditemukan.");
+}
+
+// Ambil detail produk pesanan
+$detailObj = new PesananDetail($pdo);
+$produkDipesan = $detailObj->getByPesanan($id);
+?>
+
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- goggle font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <!-- google font end -->
-
-    <!-- css -->
+    <title>Detail Pembayaran</title>
     <link href="../src/output.css" rel="stylesheet">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="Assets/image/Fix Logo 14 busworkshop Hitam.png" sizes="100x10">
-    <!-- End Favicon -->
-    <title>Document</title>
 </head>
 
-<body>
+<body class="bg-gray-50 font-[Poppins]">
     <div class="px-10 lg:px-20 pt-10 pb-5">
         <div class="flex mb-10">
-            <a href="dashboard.php">back</a>
+            <a href="dashboard.php" class="text-blue-600 hover:underline">← Kembali</a>
             <h2 class="mx-auto text-3xl font-semibold">Detail Pembayaran</h2>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 items-start">
 
-            <!-- Bukti Bayar (Kiri) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 items-start">
+            <!-- Bukti Bayar -->
             <div class="flex flex-col items-center mt-5 gap-4">
-                <img src="Assets\image\2.jpg" alt="Bukti Pembayaran"
+                <img src="../uploads/<?= htmlspecialchars($pesanan['bukti_bayar']) ?>" alt="Bukti Pembayaran"
                     class="w-[300px] h-[400px] object-cover rounded-xl border shadow" />
 
-                <!-- Tombol Aksi -->
-                <div class="flex flex-col sm:flex-row mt-5 gap-4">
-                    <button
-                        class="bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-2 rounded-lg transition">Setujui</button>
-                    <button
-                        class="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-2 rounded-lg transition">Tolak</button>
+                <!-- button -->
+                <div class="flex flex-row mt-5 gap-4">
+                    <a href="ubah_status.php?id=<?= $pesanan['id_pesanan'] ?>&status=Disetujui"
+                        class="bg-green-400 text-white px-3 py-1.5 rounded-sm">Setujui</a>
+                    <a href="ubah_status.php?id=<?= $pesanan['id_pesanan'] ?>&status=Ditolak"
+                        class="bg-red-400 text-white px-3 py-1.5 rounded-sm">Tolak</a>
                 </div>
             </div>
 
-
-            <!-- Informasi Pembayaran (Kanan) -->
-            <div class="space-y-4 lg:pt-8 ">
+            <!-- Informasi Pembayaran -->
+            <div class="space-y-4 lg:pt-8">
                 <div>
                     <h3 class="font-medium text-gray-700">Nama Pemesan:</h3>
-                    <p class="text-gray-900">Afif Henri</p>
+                    <p class="text-gray-900"><?= htmlspecialchars($pesanan['nama_pembeli']) ?></p>
                 </div>
                 <div>
                     <h3 class="font-medium text-gray-700">Nomor Telepon:</h3>
-                    <p class="text-gray-900">0812-3456-7890</p>
+                    <p class="text-gray-900"><?= htmlspecialchars($pesanan['no_telp']) ?></p>
                 </div>
                 <div>
-                    <h3 class="font-medium text-gray-700">Tanggal Pembayaran:</h3>
-                    <p class="text-gray-900">20 Juni 2025</p>
+                    <h3 class="font-medium text-gray-700">Tanggal Pemesanan:</h3>
+                    <p class="text-gray-900"><?= date('d M Y', strtotime($pesanan['tanggal_pesan'])) ?></p>
                 </div>
+                <div>
+                    <h3 class="font-medium text-gray-700 mb-1">Produk Dipesan:</h3>
+                    <ul class="text-gray-900 list-disc ml-5 space-y-1">
+                        <?php foreach ($produkDipesan as $item): ?>
+                            <li>
+                                <?= htmlspecialchars($item['nama_kategori']) ?> - <?= $item['jumlah'] ?> pcs
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+
                 <div>
                     <h3 class="font-medium text-gray-700">Total Pembayaran:</h3>
-                    <p class="text-gray-900">Rp750.000</p>
+                    <p class="text-gray-900">Rp <?= number_format($pesanan['total'], 0, ',', '.') ?></p>
                 </div>
                 <div>
                     <h3 class="font-medium text-gray-700 flex items-center gap-2">
-                        Request:
-                        <!-- Ikon untuk melihat gambar -->
-                        <a href="gambar-request.jpg" target="_blank" class="text-blue-600 hover:text-blue-800"
-                            title="Lihat Gambar Request">
-                            <!-- Heroicons eye (lihat) -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.522 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7s-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </a>
+                        Gambar Request:
+                        <?php if (!empty($pesanan['gambar_request'])): ?>
+                            <a href="../uploads/<?= $pesanan['gambar_request'] ?>" target="_blank"
+                                class="text-blue-600 hover:underline">Lihat Gambar</a>
+                        <?php else: ?>
+                            <span class="text-gray-400 italic">Tidak ada</span>
+                        <?php endif; ?>
                     </h3>
-                    <p class="text-gray-900 text-justify">Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                        Voluptatibus maiores doloremque sit, aliquam animi impedit facilis dolores inventore deleniti
-                        voluptates asperiores nihil. Iusto nihil facilis neque animi laborum deleniti exercitationem,
-                        sequi praesentium vero perferendis labore assumenda aut quidem unde aliquam quos vel numquam
-                        consequuntur fuga molestiae tenetur modi sint ipsam tempore. Consectetur necessitatibus
-                        voluptatum minus tenetur quo, tempore ad, eaque iusto labore error vel itaque et velit numquam
-                        nam optio? Totam at, obcaecati cumque molestias velit reiciendis optio unde facilis animi illum
-                        veritatis perferendis provident inventore odit autem, debitis deserunt dignissimos. Molestiae
-                        doloribus atque quas dolorum id mollitia earum quis?</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-700">Deskripsi Tambahan:</h3>
+                    <p class="text-gray-900 text-justify"><?= nl2br(htmlspecialchars($pesanan['deskripsi_tambahan'])) ?>
+                    </p>
                 </div>
             </div>
         </div>
-
-
     </div>
 </body>
 

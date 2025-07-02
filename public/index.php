@@ -48,7 +48,11 @@ if ($idKategori) {
     <link rel="icon" type="image/png" href="Assets/image/Fix Logo 14 busworkshop Hitam.png" sizes="100x10">
     <!-- End Favicon -->
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- animation -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- AOS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
 
     <title>FourteenBus Workshop - Miniatur Bus</title>
@@ -56,7 +60,8 @@ if ($idKategori) {
 
 <body>
     <!-- Navbar -->
-    <header class="bg-transparent absolute top-0 left-0 w-full flex items-center z-10 navbar-fix">
+    <header
+        class="bg-transparent absolute top-0 left-0 w-full flex items-center z-10 navbar-fix animate__animated animate__fadeInDown animated__delay-3s">
         <div class="container max-w-full mx-5 lg:mx-10">
             <div class="flex items-center justify-between relative">
                 <div class="px-5">
@@ -100,25 +105,31 @@ if ($idKategori) {
         <div class="container max-w-full px-10 lg:px-15">
             <div class="flex flex-wrap">
                 <div class="md:w-1/2">
-                    <h2 class="text-3xl tracking-normal font-bold lg:text-4xl mb-5 mr-2">Wujudkan Miniatur Bus Impian
+                    <h2
+                        class="text-3xl tracking-normal font-bold lg:text-4xl mb-5 mr-2 animate__animated animate__fadeInUp animate__delay-1s">
+                        Wujudkan Miniatur Bus Impian
                         Anda Dengan <br>Kualitas Unggul.</h2>
 
-                    <p class="mb-8 text-md lg:text-lg leading-6 text-dark mr-24">Ciptakan bus impian Anda dalam bentuk
+                    <p
+                        class="mb-8 text-md lg:text-lg leading-6 text-dark mr-24 animate__animated animate__fadeInUp animate__delay-1s">
+                        Ciptakan bus impian Anda dalam bentuk
                         miniatur
                         yang presisi
                         dan eksklusif, cocok untuk koleksi pribadi atau hadiah spesial.</p>
-                    <a href="#kategori" class="bg-amber-300 hover:bg-amber-400 text-white py-3 px-10 rounded-full">Pesan
+                    <a href="#kategori"
+                        class="bg-amber-300 hover:bg-amber-400 text-white py-3 px-10 rounded-full animate__animated animate__fadeInUp animate__delay-1s">Pesan
                         Sekarang</a>
                 </div>
-                <div class="max-w-full md:w-1/2 mt-10 md:mt-0 mb-5 grid grid-cols-2 gap-2">
+                <div
+                    class="max-w-full md:w-1/2 mt-10 md:mt-0 mb-5 grid grid-cols-2 gap-2 animate__animated animate__fadeInUp animate__delay-1s">
                     <div class="bg-amber-500 col-span-2 rounded-2xl h-52 overflow-hidden">
                         <img src="Assets\image\1.jpg" alt="" class="object-cover w-full h-full">
                     </div>
                     <div class="bg-amber-500 rounded-xl h-36 overflow-hidden">
-                        <img src="Assets\image\1.jpg" alt="" class="object-cover w-full h-full">
+                        <img src="Assets\image\4.jpg" alt="" class="object-cover w-full h-full">
                     </div>
                     <div class="bg-amber-500 rounded-xl h-36 overflow-hidden">
-                        <img src="Assets\image\1.jpg" alt="" class="object-cover w-full h-full">
+                        <img src="Assets\image\5.jpg" alt="" class="object-cover w-full h-full">
                     </div>
                 </div>
             </div>
@@ -142,22 +153,14 @@ if ($idKategori) {
                 <a href="#slide3" class="btn btn-circle bg-transparant border-none">❯</a>
             </div>
         </div>
-        <div id="slide3" class="carousel-item relative w-full overflow-hidden">
-            <img src="https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp"
-                class="object-cover w-full h-full" />
-            <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-                <a href="#slide2" class="btn btn-circle bg-transparant border-none">❮</a>
-                <a href="#slide1" class="btn btn-circle bg-transparant border-none">❯</a>
-            </div>
-        </div>
     </div>
     <!-- carousel end -->
 
     <!-- Kategori -->
     <section id="kategori" class="mb-28 mt-20 ">
         <div class="container max-w-full px-10 lg:px-15">
-            <h2 class="text-3xl font-semibold text-center">Kategori</h2>
-            <div class="flex flex-wrap justify-center mt-8 gap-4">
+            <h2 class="text-3xl font-semibold text-center" data-aos="fade-up" data-aos-duration="1100">Kategori</h2>
+            <div class="flex flex-wrap justify-center mt-8 gap-4" data-aos="fade-up" data-aos-duration="1100">
                 <?php foreach ($kategoriList as $kategori): ?>
                     <a href="?id=<?= $kategori['id_kategori'] ?>"
                         class="w-80 h-48 bg-amber-300 relative overflow-hidden group rounded-xl shadow-md transition-all duration-300 hover:scale-105 block">
@@ -173,7 +176,7 @@ if ($idKategori) {
             </div>
 
             <!-- Grid -->
-            <div class="grid grid-cols-3 gap-4 mt-10 p-6">
+            <div class="grid grid-cols-3 gap-4 mt-10 p-6" data-aos="fade-up" data-aos-duration="1100">
 
                 <!-- Media utama: Video jika ada, gambar jika tidak -->
                 <div
@@ -221,171 +224,158 @@ if ($idKategori) {
                     Pesan Sekarang
                 </button>
 
-                <!-- form satu -->
-                <div id="form-satu"
+                <!-- form pesanan -->
+                <form id="form-pemesanan" method="POST" action="simpan_pesanan.php" enctype="multipart/form-data"
                     class="hidden fixed inset-0 bg-black/60 items-center justify-center z-50 p-4 modal-container">
-
                     <div id="form-box-1"
-                        class="w-full max-w-3xl bg-white p-6 md:p-8 rounded-xl shadow-lg flex flex-col max-h-[90vh]">
+                        class="w-full max-w-3xl bg-white p-6 md:p-8 rounded-xl shadow-lg flex flex-col max-h-[90vh] overflow-y-auto">
 
                         <h1 class="text-3xl font-bold text-gray-800 mb-2">Form Pemesanan</h1>
-                        <p class="text-gray-500 mb-6">Pilih produk, unggah contoh gambar jika perlu, dan tambahkan
-                            catatan.</p>
+                        <p class="text-gray-500 mb-6">Pilih produk, unggah gambar contoh (opsional), dan isi data
+                            pemesanan.</p>
 
-                        <div class="flex-grow overflow-y-auto pr-2">
-                            <div class="flex items-center space-x-4 mb-6">
-                                <div class="flex-grow">
-                                    <label for="product-category" class="sr-only">Pilih Produk</label>
-                                    <select id="product-category"
-                                        class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg">
-                                        <option value="" disabled selected>-- Pilih Kategori Produk --</option>
-                                        <?php foreach ($semuaProduk as $item): ?>
-                                            <option value="<?= $item['id_kategori'] ?>" data-harga="<?= $item['harga'] ?>">
-                                                <?= htmlspecialchars($item['nama_kategori']) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-
-                                </div>
-                                <button id="add-product-btn" type="button"
-                                    class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-5 rounded-lg flex items-center space-x-2 whitespace-nowrap">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                    </svg>
-                                    <span>Tambah</span>
-                                </button>
+                        <!-- Pilih Produk -->
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="flex-grow">
+                                <label for="product-category" class="sr-only">Pilih Produk</label>
+                                <select id="product-category"
+                                    class="block w-full p-3 border border-gray-300 rounded-lg text-lg">
+                                    <option value="" disabled selected>-- Pilih Kategori Produk --</option>
+                                    <?php foreach ($semuaProduk as $item): ?>
+                                        <option value="<?= $item['id_kategori'] ?>" data-harga="<?= $item['harga'] ?>">
+                                            <?= htmlspecialchars($item['nama_kategori']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
+                            <button id="add-product-btn" type="button"
+                                class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-5 rounded-lg flex items-center space-x-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                                <span>Tambah</span>
+                            </button>
+                        </div>
 
-                            <hr class="my-4">
+                        <hr class="my-4">
 
-                            <h2 class="text-xl font-semibold text-gray-700 mb-4">Produk Dipesan</h2>
-                            <div id="selected-products-list" class="space-y-4 mb-6">
-                                <div id="empty-state"
-                                    class="text-center py-8 px-4 border-2 border-dashed border-gray-300 rounded-lg">
-                                    <p class="text-gray-500">Belum ada produk yang ditambahkan.</p>
-                                </div>
-                            </div>
-
-                            <hr class="my-4">
-
-                            <div class="mb-6">
-                                <label for="image-upload" class="block text-xl font-semibold text-gray-700 mb-2">Upload
-                                    Contoh Gambar</label>
-                                <input id="image-upload" type="file" class="block w-full text-sm text-gray-500
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-full file:border-0
-                        file:text-sm file:font-semibold
-                        file:bg-blue-50 file:text-amber-500
-                        hover:file:bg-blue-100" />
-                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Maksimal 2MB (opsional).</p>
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="additional-notes"
-                                    class="block text-xl font-semibold text-gray-700 mb-2">Catatan Tambahan</label>
-                                <textarea id="additional-notes" rows="4"
-                                    class="block w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    placeholder="Contoh: Buat seperti bu PO Haryanto"></textarea>
+                        <!-- Produk Dipesan -->
+                        <h2 class="text-xl font-semibold text-gray-700 mb-4">Produk Dipesan</h2>
+                        <div id="selected-products-list" class="space-y-4 mb-6">
+                            <div id="empty-state"
+                                class="text-center py-8 px-4 border-2 border-dashed border-gray-300 rounded-lg">
+                                <p class="text-gray-500">Belum ada produk yang ditambahkan.</p>
                             </div>
                         </div>
 
-                        <div class="mt-6 pt-4 border-t flex justify-between">
-                            <p id="total-harga" class="text-lg font-bold text-right mr-4 mt-4">Total: Rp0</p>
-                            <button id="btn-selanjutnya"
-                                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg flex items-center space-x-2">
-                                <span>Selanjutnya</span>
+                        <hr class="my-4">
+
+                        <!-- Gambar Contoh (Opsional) -->
+                        <div class="mb-6">
+                            <label for="image-upload" class="block text-xl font-semibold text-gray-700 mb-2">Upload
+                                Gambar Contoh (Opsional)</label>
+                            <input id="image-upload" type="file" class="w-full" name="gambar_request" />
+                            <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG. Maksimal 2MB.</p>
+                        </div>
+
+                        <!-- Catatan Tambahan -->
+                        <div class="mb-4">
+                            <label for="additional-notes" class="block text-xl font-semibold text-gray-700 mb-2">Catatan
+                                Tambahan (Opsional)</label>
+                            <textarea id="additional-notes" name="deskripsi_tambahan" rows="4"
+                                class="block w-full p-3 border border-gray-300 rounded-lg"
+                                placeholder="Contoh: Buat seperti bus PO Haryanto"></textarea>
+                        </div>
+
+                        <!-- Data Diri -->
+                        <div class="mb-3">
+                            <label for="name" class="block text-gray-700 text-md font-medium">Nama</label>
+                            <input type="text" id="name" name="nama"
+                                class="w-full border border-gray-300 rounded px-3 py-2"
+                                placeholder="Masukkan nama lengkap" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor WhatsApp</label>
+                            <input type="text" id="nomor" name="telepon"
+                                class="w-full border border-gray-300 rounded px-3 py-2" placeholder="08xxx" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat</label>
+                            <input type="text" id="alamat" name="alamat"
+                                class="w-full border border-gray-300 rounded px-3 py-2"
+                                placeholder="Masukkan alamat lengkap" required>
+                        </div>
+
+                        <!-- Upload Bukti Bayar -->
+                        <div class="my-3">
+                            <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar</label>
+                            <input type="file" name="bukti_bayar" required class="w-full">
+                            <p class="text-sm text-gray-500">Format JPG/PNG, maksimal 2MB</p>
+                        </div>
+
+                        <!-- Rekening -->
+                        <div class="mt-3">
+                            <h2 class="font-semibold">Pembayaran</h2>
+                            <p>BRI : 092189389172312</p>
+                        </div>
+
+                        <div class="mt-3">
+                            <input type="hidden" id="ongkir" value="10000" />
+                            <p class="text-gray-600 text-sm mt-2">Ongkos Kirim: Rp10.000</p>
+                        </div>
+
+                        <!-- Total + Submit -->
+                        <div class="mt-6 pt-4 border-t flex justify-between md:flex-row">
+                            <div class="text-right md:w-auto left-0 ">
+                                <p id="subtotal-text" class="text-sm text-gray-600">
+                                    Subtotal: Rp0 + Ongkir: Rp0
+                                </p>
+                                <p id="total-bayar" class="text-xl font-bold text-red-600 mt-1">
+                                    Total Bayar: Rp0
+                                </p>
+                            </div>
+
+                            <button type="submit"
+                                class="mt-4 ml-4 md:mt-0 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg flex items-center space-x-2">
+                                <span>Kirim</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                     stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                 </svg>
                             </button>
+                            <input type="hidden" name="total" id="total-input" />
                         </div>
-                        <!-- Tambahkan di bagian akhir form 1 -->
-                        <input type="hidden" name="produk_detail" id="produk-detail-json">
 
                     </div>
-                </div>
 
-                <!-- Form pertama end -->
+                    <!-- Hidden Input -->
+                    <input type="hidden" name="produk_detail" id="produk-detail-json">
 
-                <!-- form kedua -->
-                <div id="form-dua"
-                    class="fixed inset-0 bg-black/40 shadow-xl items-center p-4 justify-center z-[9999] hidden">
-                    <div id="form-box" class="bg-white p-8 rounded-xl shadow-lg w-[90%] max-w-md">
-                        <div class="flex">
-                            <a class="cursor-pointer" id="btn-kembali">Back</a>
-                            <h2 class="text-xl font-semibold mb-4 mx-auto">Formulir Pemesanan</h2>
-                        </div>
-                        <form id="form-pemesanan" method="POST" action="simpan_pesanan.php"
-                            enctype="multipart/form-data">
-                            <!-- Input Nama -->
-                            <div class="mb-3">
-                                <label for="name" class="block text-gray-700 text-md font-medium">Nama</label>
-                                <input type="text" id="name" name="nama"
-                                    class="w-full border border-gray-300 rounded px-3 py-2"
-                                    placeholder="Masukkan nama lengkap" required>
-                            </div>
+            </div>
+            </form>
 
-                            <!-- Input Nomor WhatsApp -->
-                            <div class="mb-3">
-                                <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor
-                                    WhatsApp</label>
-                                <input type="text" id="nomor" name="telepon"
-                                    class="w-full border border-gray-300 rounded px-3 py-2" placeholder="08xxx"
-                                    required>
-                            </div>
+            <!-- Form pertama end -->
 
-                            <!-- Input Alamat -->
-                            <div class="mb-3">
-                                <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat</label>
-                                <input type="text" id="alamat" name="alamat"
-                                    class="w-full border border-gray-300 rounded px-3 py-2"
-                                    placeholder="Masukkan alamat lengkap" required>
-                            </div>
-
-                            <!-- Upload Bukti Bayar -->
-                            <div class="mb-3">
-                                <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar</label>
-                                <input type="file" name="bukti_bayar" required class="w-full">
-                                <p class="text-sm text-gray-500">Format JPG/PNG, maksimal 2MB</p>
-                            </div>
-
-                            <!-- Hidden untuk total -->
-                            <input type="hidden" name="total" id="total-value" value="">
-
-                            <!-- Hidden untuk data produk -->
-                            <input type="hidden" name="produk_detail" id="produk-detail-json">
-
-                            <input type="hidden" name="total" id="total-input">
-
-                            <!-- Tombol Kirim -->
-                            <div class="flex justify-end">
-                                <button type="submit"
-                                    class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
-                                    Kirim
-                                </button>
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
     </section>
     <!-- Kategori end -->
 
     <!-- servis -->
     <section id="servis" class="mt-20">
         <div class="container max-w-full px-10 lg:px-15">
-            <h2 class="text-4xl font-semibold text-center my-10 pb-5">Layanan Kami</h2>
+            <h2 class="text-4xl font-semibold text-center my-10 pb-5" data-aos="fade-up" data-aos-duration="1100">
+                Layanan Kami</h2>
             <div class="my-8">
                 <div class="flex flex-wrap">
-                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2">
+                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2" data-aos="fade-up" data-aos-duration="1200">
                         <img src="Assets\image\buat.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
-                    <div class="lg:w-1/2 lg:pl-8 lg:pt-8">
-                        <h3 class="text-3xl font-semibold mt-10 mb-3 lg:mt-0 ">Buatan Tangan, Penuh Ketelitian</h3>
+                    <div class="lg:w-1/2 lg:pl-8 lg:pt-8" data-aos="fade-up" data-aos-duration="1300">
+                        <h3 class="text-3xl font-semibold mt-10 mb-3 lg:mt-0">Buatan Tangan, Penuh Ketelitian</h3>
                         <p class="text-justify text-base lg:mr-4">Setiap miniatur bus kami dibuat dengan tangan oleh
                             pengrajin
                             berpengalaman, bukan hasil pabrik massal. Mulai dari detail bodi, livery, hingga aksesori
@@ -399,11 +389,12 @@ if ($idKategori) {
 
             <div class="pt-10 lg:pt-20 pb-28 ">
                 <div class="flex flex-wrap">
-                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2 lg:hidden">
+                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2 lg:hidden" data-aos="fade-up"
+                        data-aos-duration="1200">
                         <img src="Assets/image/packing.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
-                    <div class="lg:w-1/2 lg:pr-8 lg:pt-5 ">
+                    <div class="lg:w-1/2 lg:pr-8 lg:pt-5" data-aos="fade-up" data-aos-duration="1300">
                         <h3 class="text-3xl font-semibold mt-10 mb-3 lg:mt-0 ">Pengemasan Aman, Sampai Tanpa Cacat</h3>
                         <p class="text-justify lg:mr-8">Kami tahu betapa berharganya miniatur ini bagi Anda. Karena itu,
                             setiap pesanan kami bungkus dengan hati-hati menggunakan lapisan bubble wrap berlapis dan
@@ -412,7 +403,7 @@ if ($idKategori) {
                         </p>
                     </div>
 
-                    <div class="hidden h-80 rounded-xl overflow-hidden lg:w-1/2 lg:block">
+                    <div class="hidden h-80 rounded-xl overflow-hidden lg:w-1/2 lg:block" data-aos="fade-up" data-aos-duration="1300">
                         <img src="Assets/image/packing.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
@@ -430,7 +421,7 @@ if ($idKategori) {
             <img src="Assets/image/Fix Logo 14 busworkshop Hitam.png" class="h-16 mt-5" alt="">
             <p>
                 Fourteen Bus Workshop<br />
-                &copy; 2024 All rights reserved.
+                &copy; 2025 All rights reserved.
             </p>
         </aside>
 
@@ -445,7 +436,8 @@ if ($idKategori) {
         <!-- Media sosial -->
         <nav class="mt-5">
             <h6 class="footer-title">Sosial Media</h6>
-            <a href="#" class="link link-hover">Instagram</a>
+            <a href="https://www.instagram.com/14.busworkshop?utm_source=ig_web_button_share_sheet&igsh=MWxuNnBvbjUzZ3hvdQ=="
+                class="link link-hover">Instagram</a>
             <a href="#" class="link link-hover">Facebook</a>
             <a href="#" class="link link-hover">WhatsApp</a>
         </nav>
@@ -469,6 +461,12 @@ if ($idKategori) {
     <!-- <script src="js\script.js"></script> -->
     <script src="js\form.js"></script>
     <!-- js end-->
+
+    <!-- AOS -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 
 </html>

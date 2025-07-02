@@ -158,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="video" class="block mb-1 font-medium">Video *</label>
                     <input type="file" name="video" id="video" accept="video/*"
                         class="w-full px-3 py-2 border border-gray-900 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <p class="text-sm text-gray-600 mb-4">Format: MP4, AVI, MOV (Max: 50MB)</p>
+                    <p class="text-sm text-gray-600 mb-4">Format: MP4, AVI, MOV (Max: 20MB)</p>
 
                     <label for="gambar1" class="block mb-1 font-medium">Gambar 1 *</label>
                     <input type="file" name="gambar1" id="gambar1" accept="image/*"
@@ -193,8 +193,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Validasi video (max 50MB)
             videoInput.addEventListener('change', function () {
-                if (this.files[0] && this.files[0].size > 50 * 1024 * 1024) {
-                    alert('Ukuran video terlalu besar! Maksimal 50MB.');
+                if (this.files[0] && this.files[0].size > 20 * 1024 * 1024) {
+                    alert('Ukuran video terlalu besar! Maksimal 20MB.');
                     this.value = '';
                 }
             });
