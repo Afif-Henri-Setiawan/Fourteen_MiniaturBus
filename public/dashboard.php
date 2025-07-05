@@ -54,13 +54,22 @@ $jumlahPesanan = $pesanan->count();
                 <div class="ml-2 h-5 w-5 flex justify-center items-center text-xs rounded-full bg-amber-300 text-black">
                     <?= $jumlahPesanan ?>
                 </div>
-
             </li>
             <li id="nav-produk" class="flex items-center px-8 text-gray-500 cursor-pointer hover:text-black transition"
                 onclick="showPage('produk')">
                 Produk
             </li>
         </ul>
+        <div class="flex flex-wrap gap-2 mt-1">
+            <button onclick="filterPesanan('semua')"
+                class="filter-btn bg-gray-200 text-gray-700 hover:bg-gray-300 px-3 py-1 rounded text-sm font-medium cursor-pointer">Semua</button>
+            <button onclick="filterPesanan('menunggu')"
+                class="filter-btn bg-yellow-100 text-yellow-800 hover:bg-yellow-200 px-3 py-1 rounded text-sm font-medium cursor-pointer">Menunggu</button>
+            <button onclick="filterPesanan('disetujui')"
+                class="filter-btn bg-green-100 text-green-800 hover:bg-green-200 px-3 py-1 rounded text-sm font-medium cursor-pointer">Disetujui</button>
+            <button onclick="filterPesanan('ditolak')"
+                class="filter-btn bg-red-100 text-red-800 hover:bg-red-200 px-3 py-1 rounded text-sm font-medium cursor-pointer">Ditolak</button>
+        </div>
     </div>
 
     <!-- KONTEN PESANAN -->
@@ -68,7 +77,7 @@ $jumlahPesanan = $pesanan->count();
         <ul class="space-y-4">
             <?php if (count($semuaPesanan) > 0): ?>
                 <?php foreach ($semuaPesanan as $pesanan): ?>
-                    <li class="flex items-center bg-white rounded-lg shadow p-4">
+                    <li class="flex items-center bg-white rounded-lg shadow p-4 pesanan-item <?= $pesanan['status'] ?>">
                         <img src="Assets/image/1.jpg" alt="Bus Mini" class="w-16 h-16 object-cover rounded mr-6">
                         <div class="flex-1">
                             <div class="flex text-xs text-gray-400">
@@ -99,8 +108,6 @@ $jumlahPesanan = $pesanan->count();
                                                 ($pesanan['status'] === 'menunggu' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-200 text-gray-800')) ?>">
                                         <?= htmlspecialchars($pesanan['status']) ?>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -114,7 +121,6 @@ $jumlahPesanan = $pesanan->count();
                 <li class="text-gray-500">Belum ada pesanan masuk.</li>
             <?php endif; ?>
         </ul>
-
     </div>
 
     <!-- KONTEN PRODUK -->

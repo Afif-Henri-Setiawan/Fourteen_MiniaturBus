@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalBayarElement = document.getElementById("total-bayar");
   const totalInput = document.getElementById("total-input");
   const ongkirInput = document.getElementById("ongkir");
+  const ongkirText = document.getElementById("ongkir-text");
+  const wilayahSelect = document.getElementById("select-wilayah");
 
   let produkTerpilih = [];
 
@@ -79,8 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
       </span>
     `;
     totalBayarElement.textContent = `Total Bayar: ${formatRupiah(totalBayar)}`;
-    totalBayarElement.className =
-      "text-xl font-bold text-red-600 text-right mt-1";
     totalInput.value = totalBayar;
   };
 
@@ -142,24 +142,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  formPemesanan.addEventListener("submit", (e) => {
-    if (produkTerpilih.length === 0) {
-      e.preventDefault();
-      alert("Minimal pilih 1 produk.");
-      return;
-    }
+  if (wilayahSelect) {
+    wilayahSelect.addEventListener("change", () => {
+      const selected = wilayahSelect.options[wilayahSelect.selectedIndex];
+      const ongkirBaru = parseInt(selected.getAttribute("data-ongkir")) || 0;
+      ongkirInput.value = ongkirBaru;
 
-    const ongkir = parseInt(ongkirInput.value) || 0;
-    const total = produkTerpilih.reduce(
-      (acc, produk) => acc + produk.subtotal,
-      0
-    );
-    const totalAkhir = total + ongkir;
+      if (ongkirText) {
+        ongkirText.textContent = formatRupiah(ongkirBaru);
+      }
 
-    document.getElementById("produk-detail-json").value =
-      JSON.stringify(produkTerpilih);
-    document.getElementById("total-input").value = totalAkhir;
-  });
+      renderPesanan();
+    });
+  }
 
   formPemesanan.addEventListener("submit", (e) => {
     if (produkTerpilih.length === 0) {
@@ -179,7 +174,14 @@ document.addEventListener("DOMContentLoaded", () => {
       JSON.stringify(produkTerpilih);
     document.getElementById("total-input").value = totalAkhir;
 
-    // 🔒 Disable tombol submit untuk mencegah klik ganda
+    // Hindari klik ganda
     e.target.querySelector("button[type='submit']").disabled = true;
   });
 });
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const icon = btn.querySelector("span");
+  answer.classList.toggle("hidden");
+  icon.classList.toggle("rotate-180");
+}

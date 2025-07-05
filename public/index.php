@@ -1,11 +1,15 @@
 <?php
 require_once '../config/Database.php';
 require_once '../classes/Produk.php';
+require_once '../classes/Wilayah.php';
 
+$conn = Database::getConnection();
 $produk = new Produk();
 $semuaProduk = $produk->getAll();
 $first = $semuaProduk[0];
 
+$wilayahObj = new Wilayah($conn);
+$semuaWilayah = $wilayahObj->getAll();
 
 // Ambil semua kategori unik
 $kategoriList = $produk->getKategoriList();
@@ -17,7 +21,7 @@ if ($idKategori) {
     $produkPerKategori = $produk->getByKategori($idKategori);
     $first = $produkPerKategori[0] ?? null;
 } else {
-    $produkPerKategori = $produk->getAll(); // Default: semua produk
+    $produkPerKategori = $produk->getAll();
     $first = $produkPerKategori[0] ?? null;
 }
 ?>
@@ -178,7 +182,6 @@ if ($idKategori) {
             <!-- Grid -->
             <div class="grid grid-cols-3 gap-4 mt-10 p-6" data-aos="fade-up" data-aos-duration="1100">
 
-                <!-- Media utama: Video jika ada, gambar jika tidak -->
                 <div
                     class="bg-red-600 h-[1920] col-span-3 lg:row-span-3 lg:col-span-1 flex items-center overflow-hidden justify-center rounded-xl">
                     <?php if (!empty($first['video'])): ?>
@@ -189,19 +192,19 @@ if ($idKategori) {
                     <?php endif; ?>
                 </div>
 
-                <!-- Gambar kecil 1 -->
+                <!-- Gambar 1 -->
                 <div class="bg-red-500 h-60 col-span-3 lg:col-span-1 rounded-xl">
                     <img src="../uploads/<?= htmlspecialchars($first['gambar2']) ?>" alt="Gambar 2"
                         class="w-full h-full object-cover rounded-xl">
                 </div>
 
-                <!-- Gambar kecil 2 -->
+                <!-- Gambar 2 -->
                 <div class="bg-red-500 h-60 col-span-3 lg:col-span-1 rounded-xl">
                     <img src="../uploads/<?= htmlspecialchars($first['gambar3']) ?>" alt="Gambar 3"
                         class="w-full h-full object-cover rounded-xl">
                 </div>
 
-                <!-- Gambar tambahan -->
+                <!-- Gambar 3 -->
                 <div class="bg-red-400 h-72 col-span-3 lg:col-span-2 hidden lg:block rounded-xl">
                     <img src="../uploads/<?= htmlspecialchars($first['gambar']) ?>" alt="Gambar Tambahan"
                         class="w-full h-full object-cover rounded-xl">
@@ -272,7 +275,7 @@ if ($idKategori) {
 
                         <hr class="my-4">
 
-                        <!-- Gambar Contoh (Opsional) -->
+                        <!-- Gambar Contoh -->
                         <div class="mb-6">
                             <label for="image-upload" class="block text-xl font-semibold text-gray-700 mb-2">Upload
                                 Gambar Contoh (Opsional)</label>
@@ -291,20 +294,35 @@ if ($idKategori) {
 
                         <!-- Data Diri -->
                         <div class="mb-3">
-                            <label for="name" class="block text-gray-700 text-md font-medium">Nama</label>
+                            <label for="name" class="block text-gray-700 text-md font-medium">Nama <span class="text-red-500">*</span></label>
                             <input type="text" id="name" name="nama"
                                 class="w-full border border-gray-300 rounded px-3 py-2"
                                 placeholder="Masukkan nama lengkap" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor WhatsApp</label>
+                            <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor WhatsApp <span class="text-red-500">*</span></label>
                             <input type="text" id="nomor" name="telepon"
                                 class="w-full border border-gray-300 rounded px-3 py-2" placeholder="08xxx" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat</label>
+                            <label for="wilayah" class="block text-gray-700 text-md font-medium">Pilih Wilayah <span class="text-red-500">*</span></label>
+                            <select id="select-wilayah" name="id_wilayah" required
+                                class="block w-full p-3 border border-gray-300 rounded-lg text-lg">
+                                <option value="">-- Pilih Wilayah --</option>
+                                <?php foreach ($semuaWilayah as $wilayah): ?>
+                                    <option value="<?= $wilayah['id'] ?>" data-ongkir="<?= $wilayah['ongkir'] ?>">
+                                        <?= htmlspecialchars($wilayah['nama_wilayah']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat <span class="text-red-500">*</span></label>
                             <input type="text" id="alamat" name="alamat"
                                 class="w-full border border-gray-300 rounded px-3 py-2"
                                 placeholder="Masukkan alamat lengkap" required>
@@ -312,7 +330,7 @@ if ($idKategori) {
 
                         <!-- Upload Bukti Bayar -->
                         <div class="my-3">
-                            <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar</label>
+                            <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar <span class="text-red-500">*</span></label>
                             <input type="file" name="bukti_bayar" required class="w-full">
                             <p class="text-sm text-gray-500">Format JPG/PNG, maksimal 2MB</p>
                         </div>
@@ -324,8 +342,8 @@ if ($idKategori) {
                         </div>
 
                         <div class="mt-3">
-                            <input type="hidden" id="ongkir" value="10000" />
-                            <p class="text-gray-600 text-sm mt-2">Ongkos Kirim: Rp10.000</p>
+                            <input type="hidden" id="ongkir" name="ongkir" value="0" />
+                            <p class="text-gray-600 text-sm mt-2">Ongkos Kirim: <span id="ongkir-text">Rp0</span></p>
                         </div>
 
                         <!-- Total + Submit -->
@@ -370,7 +388,8 @@ if ($idKategori) {
                 Layanan Kami</h2>
             <div class="my-8">
                 <div class="flex flex-wrap">
-                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2" data-aos="fade-up" data-aos-duration="1200">
+                    <div class="w-full rounded-xl h-80 overflow-hidden lg:w-1/2" data-aos="fade-up"
+                        data-aos-duration="1200">
                         <img src="Assets\image\buat.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
@@ -387,9 +406,9 @@ if ($idKategori) {
                 </div>
             </div>
 
-            <div class="pt-10 lg:pt-20 pb-28 ">
+            <div class="pt-10 lg:pt-20 pb-10 ">
                 <div class="flex flex-wrap">
-                    <div class="rounded-xl h-80 overflow-hidden lg:w-1/2 lg:hidden" data-aos="fade-up"
+                    <div class="w-full rounded-xl h-80 overflow-hidden lg:w-1/2 lg:hidden" data-aos="fade-up"
                         data-aos-duration="1200">
                         <img src="Assets/image/packing.jpg" alt="" class="w-full h-full object-cover">
                     </div>
@@ -403,7 +422,8 @@ if ($idKategori) {
                         </p>
                     </div>
 
-                    <div class="hidden h-80 rounded-xl overflow-hidden lg:w-1/2 lg:block" data-aos="fade-up" data-aos-duration="1300">
+                    <div class="hidden h-80 rounded-xl overflow-hidden lg:w-1/2 lg:block" data-aos="fade-up"
+                        data-aos-duration="1300">
                         <img src="Assets/image/packing.jpg" alt="" class="w-full h-full object-cover">
                     </div>
 
@@ -415,13 +435,59 @@ if ($idKategori) {
     </section>
     <!-- servis end -->
 
+    <!-- Section FAQ -->
+    <section class="w-full px-4 md:px-20 py-20 bg-white">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-yellow-600 mb-10">Pertanyaan Umum</h2>
+
+        <div class="max-w-4xl mx-auto space-y-4">
+            <!-- FAQ 1 -->
+            <div class="bg-gray-100 rounded-xl">
+                <button onclick="toggleFaq(this)"
+                    class="w-full flex justify-between items-center px-6 py-4 text-left font-medium text-gray-800 focus:outline-none">
+                    Bagaimana cara memesan produk?
+                    <span class="transform transition-transform duration-200 text-xl">&#9662;</span>
+                </button>
+                <div class="hidden px-6 pb-4 text-gray-600">
+                    Untuk memesan, silakan kunjungi halaman produk, klik tombol "Pesan Sekarang", lalu isi formulir
+                    pemesanan sesuai instruksi. Atau hubungi kami langsung melalui WhatsApp.
+                </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="bg-gray-100 rounded-xl">
+                <button onclick="toggleFaq(this)"
+                    class="w-full flex justify-between items-center px-6 py-4 text-left font-medium text-gray-800 focus:outline-none">
+                    Berapa lama waktu pembuatan?
+                    <span class="transform transition-transform duration-200 text-xl">&#9662;</span>
+                </button>
+                <div class="hidden px-6 pb-4 text-gray-600">
+                    Waktu pembuatan biasanya memakan waktu 3–5 hari kerja tergantung pada tingkat kerumitan dan jumlah
+                    pesanan.
+                </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="bg-gray-100 rounded-xl">
+                <button onclick="toggleFaq(this)"
+                    class="w-full flex justify-between items-center px-6 py-4 text-left font-medium text-gray-800 focus:outline-none">
+                    Metode pembayaran apa yang tersedia?
+                    <span class="transform transition-transform duration-200 text-xl">&#9662;</span>
+                </button>
+                <div class="hidden px-6 pb-4 text-gray-600">
+                    Kami menerima pembayaran melalui transfer bank (BCA, BRI), QRIS, serta e-wallet seperti Dana, OVO,
+                    dan GoPay.
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- footer -->
     <footer class="footer sm:footer-horizontal bg-base-200 text-base-content pl-28 p-10">
         <aside>
             <img src="Assets/image/Fix Logo 14 busworkshop Hitam.png" class="h-16 mt-5" alt="">
             <p>
                 Fourteen Bus Workshop<br />
-                &copy; 2025 All rights reserved.
+                &copy; 2025 | <a href="profil_dev.php" class="hover:text-amber-800 duration-200">Team Development</a>
             </p>
         </aside>
 
