@@ -1,5 +1,3 @@
-// Tunggu hingga seluruh halaman HTML selesai dimuat
-  // --- Blok untuk Navbar & Hamburger ---
   const header = document.querySelector("header");
   const hamburger = document.querySelector("#hamburger");
   const navMenu = document.querySelector("#nav-menu");

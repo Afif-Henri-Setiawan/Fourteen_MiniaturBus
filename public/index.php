@@ -294,20 +294,23 @@ if ($idKategori) {
 
                         <!-- Data Diri -->
                         <div class="mb-3">
-                            <label for="name" class="block text-gray-700 text-md font-medium">Nama <span class="text-red-500">*</span></label>
+                            <label for="name" class="block text-gray-700 text-md font-medium">Nama <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" id="name" name="nama"
                                 class="w-full border border-gray-300 rounded px-3 py-2"
                                 placeholder="Masukkan nama lengkap" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor WhatsApp <span class="text-red-500">*</span></label>
+                            <label for="nomor" class="block text-gray-700 text-md font-medium">Nomor WhatsApp <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" id="nomor" name="telepon"
                                 class="w-full border border-gray-300 rounded px-3 py-2" placeholder="08xxx" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="wilayah" class="block text-gray-700 text-md font-medium">Pilih Wilayah <span class="text-red-500">*</span></label>
+                            <label for="wilayah" class="block text-gray-700 text-md font-medium">Pilih Wilayah <span
+                                    class="text-red-500">*</span></label>
                             <select id="select-wilayah" name="id_wilayah" required
                                 class="block w-full p-3 border border-gray-300 rounded-lg text-lg">
                                 <option value="">-- Pilih Wilayah --</option>
@@ -322,7 +325,8 @@ if ($idKategori) {
 
 
                         <div class="mb-3">
-                            <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat <span class="text-red-500">*</span></label>
+                            <label for="alamat" class="block text-gray-700 text-md font-medium">Alamat <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" id="alamat" name="alamat"
                                 class="w-full border border-gray-300 rounded px-3 py-2"
                                 placeholder="Masukkan alamat lengkap" required>
@@ -330,7 +334,8 @@ if ($idKategori) {
 
                         <!-- Upload Bukti Bayar -->
                         <div class="my-3">
-                            <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar <span class="text-red-500">*</span></label>
+                            <label class="block text-gray-700 text-md font-medium">Upload Bukti Bayar <span
+                                    class="text-red-500">*</span></label>
                             <input type="file" name="bukti_bayar" required class="w-full">
                             <p class="text-sm text-gray-500">Format JPG/PNG, maksimal 2MB</p>
                         </div>
@@ -524,7 +529,7 @@ if ($idKategori) {
 
 
     <!-- js -->
-    <!-- <script src="js\script.js"></script> -->
+    <script src="js\script.js"></script>
     <script src="js\form.js"></script>
     <!-- js end-->
 
